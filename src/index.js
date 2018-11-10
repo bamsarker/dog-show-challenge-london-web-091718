@@ -57,9 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderDogs(state.dogs)
     })
 
-  dogForm.addEventListener('submit', event => {
-    event.preventDefault()
-
+  const editDog = () => {
     state.selectedDog.name = nameInput.value
     state.selectedDog.breed = breedInput.value
     state.selectedDog.sex = sexInput.value
@@ -71,6 +69,39 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBody.innerHTML = ''
         renderDogs(state.dogs)
       })
+  }
+
+  const newDog = () => {
+    const dog = {
+      name: nameInput.value,
+      breed: breedInput.value,
+      sex: sexInput.value
+    }
+
+    postNewDog(dog)
+      .then(getDogs)
+      .then(dogs => {
+        state.dogs = [...dogs]
+        tableBody.innerHTML = ''
+        renderDogs(state.dogs)
+      })
+  }
+
+  const formContainsData = () => {
+    return nameInput.value.length > 0 && breedInput.value.length > 0 && sexInput.value.length > 0
+  }
+
+  dogForm.addEventListener('submit', event => {
+    event.preventDefault()
+
+    // if we've selected a dog to edit
+    if (state.selectedDog !== undefined) {
+      // edit that dog
+      editDog()
+    } else if (formContainsData()) { // if the user has filled in something anyway
+      // let's take what the user has filled in and create a new dog!
+      newDog()
+    }
 
     state.selectedDog = undefined
     dogForm.reset()

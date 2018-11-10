@@ -14,6 +14,16 @@ const updateDog = dog =>
     body: JSON.stringify(dog)
   })
 
+const postNewDog = dog =>
+  fetch(dogsURL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(dog)
+  })
+
 const deleteDog = dog => {
   fetch(`${dogsURL}/${dog.id}`, {
     method: 'DELETE'
